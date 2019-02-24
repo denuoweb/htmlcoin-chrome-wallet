@@ -1,5 +1,5 @@
 import { isEmpty, find, cloneDeep } from 'lodash';
-import { Wallet as QtumWallet } from 'qtumjs-wallet';
+import { Wallet as RunebaseWallet } from 'runebasejs-wallet';
 import assert from 'assert';
 
 import QryptoController from '.';
@@ -109,7 +109,7 @@ export default class AccountController extends IController {
   * @param accountName The account name for the new wallet account.
   * @param mnemonic The mnemonic to derive the wallet from.
   */
-  public addAccountAndLogin = async (accountName: string, privateKeyHash: string, wallet: QtumWallet) => {
+  public addAccountAndLogin = async (accountName: string, privateKeyHash: string, wallet: RunebaseWallet) => {
     this.loggedInAccount = new Account(accountName, privateKeyHash);
     this.loggedInAccount.wallet = new Wallet(wallet);
 
@@ -293,7 +293,7 @@ export default class AccountController extends IController {
   * Recovers the wallet instance from an encrypted private key.
   * @param privateKeyHash The private key hash to recover the wallet from.
   */
-  private recoverFromPrivateKeyHash(privateKeyHash: string): QtumWallet {
+  private recoverFromPrivateKeyHash(privateKeyHash: string): RunebaseWallet {
     assert(privateKeyHash, 'invalid privateKeyHash');
 
     const network = this.main.network.network;
@@ -304,7 +304,7 @@ export default class AccountController extends IController {
     );
   }
 
-  private getPrivateKeyHash(wallet: QtumWallet) {
+  private getPrivateKeyHash(wallet: RunebaseWallet) {
     return wallet.toEncryptedPrivateKey(
       this.main.crypto.validPasswordHash,
       AccountController.SCRYPT_PARAMS_PRIV_KEY,
@@ -366,7 +366,7 @@ export default class AccountController extends IController {
         this.main.inpageAccount.sendInpageAccountAllPorts(QRYPTO_ACCOUNT_CHANGE.BALANCE_CHANGE);
       }
 
-      this.updateAndSendMaxQtumAmountToPopup();
+      this.updateAndSendMaxRunebaseAmountToPopup();
     }
   }
 
@@ -383,7 +383,7 @@ export default class AccountController extends IController {
 
   /*
   * Executes a sendtoaddress.
-  * @param receiverAddress The address to send Qtum to.
+  * @param receiverAddress The address to send Runebase to.
   * @param amount The amount to send.
   */
   private sendTokens = async (receiverAddress: string, amount: number, transactionSpeed: TRANSACTION_SPEED) => {
@@ -402,7 +402,7 @@ export default class AccountController extends IController {
         [TRANSACTION_SPEED.NORMAL]: 500,
         [TRANSACTION_SPEED.SLOW]: 500,
       };
-      const feeRate = rates[transactionSpeed]; // satoshi/byte; 500 satoshi/byte == .005 QTUM/KB
+      const feeRate = rates[transactionSpeed]; // satoshi/byte; 500 satoshi/byte == .005 RUNEBASE/KB
       if (!feeRate) {
         throw Error('feeRate not set');
       }
@@ -416,23 +416,23 @@ export default class AccountController extends IController {
   }
 
   /**
-   * We update the maxQtum amount under 2 scnearios
-   * 1 - When wallet.info has been updated because a new balance has a new maxQtumSend
-   * 2 - Whenever the maxQtumSend is requested, because even if the balance does not
-   * change, the available UTXOs can change(which causes a change in maxQtumSend).
-   * For instance when a user sends Qtum, but that transaction has not confirmed yet,
-   * the balance will not change, but calcMaxQtumSend is able to account for those
-   * unconfirmed UTXOs and update maxQtumSend accordingly.
+   * We update the maxRunebase amount under 2 scnearios
+   * 1 - When wallet.info has been updated because a new balance has a new maxRunebaseSend
+   * 2 - Whenever the maxRunebaseSend is requested, because even if the balance does not
+   * change, the available UTXOs can change(which causes a change in maxRunebaseSend).
+   * For instance when a user sends Runebase, but that transaction has not confirmed yet,
+   * the balance will not change, but calcMaxRunebaseSend is able to account for those
+   * unconfirmed UTXOs and update maxRunebaseSend accordingly.
    */
-  private updateAndSendMaxQtumAmountToPopup = async () => {
+  private updateAndSendMaxRunebaseAmountToPopup = async () => {
     if (!this.loggedInAccount || !this.loggedInAccount.wallet || !this.loggedInAccount.wallet.qjsWallet) {
       throw Error('Cannot calculate max balance with no wallet instance.');
     }
 
-    const calcMQSPr = this.loggedInAccount.wallet.calcMaxQtumSend(this.main.network.networkName);
+    const calcMQSPr = this.loggedInAccount.wallet.calcMaxRunebaseSend(this.main.network.networkName);
     calcMQSPr.then(() => {
-      chrome.runtime.sendMessage({ type: MESSAGE_TYPE.GET_MAX_QTUM_SEND_RETURN,
-        maxQtumAmount: this.loggedInAccount!.wallet!.maxQtumSend });
+      chrome.runtime.sendMessage({ type: MESSAGE_TYPE.GET_MAX_RUNEBASE_SEND_RETURN,
+        maxRunebaseAmount: this.loggedInAccount!.wallet!.maxRunebaseSend });
     });
   }
 
@@ -482,15 +482,15 @@ export default class AccountController extends IController {
           sendResponse(this.loggedInAccount && this.loggedInAccount.wallet
             ? this.loggedInAccount.wallet.info : undefined);
           break;
-        case MESSAGE_TYPE.GET_QTUM_USD:
+        case MESSAGE_TYPE.GET_RUNEBASE_USD:
           sendResponse(this.loggedInAccount && this.loggedInAccount.wallet
-            ? this.loggedInAccount.wallet.qtumUSD : undefined);
+            ? this.loggedInAccount.wallet.runebaseUSD : undefined);
           break;
         case MESSAGE_TYPE.VALIDATE_WALLET_NAME:
           sendResponse(this.isWalletNameTaken(request.name));
           break;
-        case MESSAGE_TYPE.GET_MAX_QTUM_SEND:
-          this.updateAndSendMaxQtumAmountToPopup();
+        case MESSAGE_TYPE.GET_MAX_RUNEBASE_SEND:
+          this.updateAndSendMaxRunebaseAmountToPopup();
           break;
         default:
           break;

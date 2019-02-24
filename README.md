@@ -80,12 +80,12 @@ window.qrypto.rpcProvider.rawCall(
 // sendtocontract
 const contractAddress = '49a941c5259e4e6ef9ac4a2a6716c1717ce0ffb6';
 const data = 'd0821b0e0000000000000000000000000000000000000000000000000000000000000001';
-const qtumAmt = 1; // optional. defaults to 0.
+const runebaseAmt = 1; // optional. defaults to 0.
 const gasLimit = 200000; // optional. defaults to 200000.
 const gasPrice = 40; // optional. defaults to 40 (satoshi).
 window.qryptoProvider.rawCall(
   'sendtocontract',
-  [contractAddress, data, qtumAmt, gasLimit, gasPrice],
+  [contractAddress, data, runebaseAmt, gasLimit, gasPrice],
 );
 
 // Handle incoming messages
@@ -111,19 +111,19 @@ function handleMessage(message) {
 window.addEventListener('message', handleMessage, false);
 ```
 
-### Using Qweb3
-You may also use our Qweb3 convenience library to make `sendtocontract` or `callcontract` calls. See the instructions in the Github repo here: https://github.com/bodhiproject/qweb3.js
+### Using Rweb3
+You may also use our Rweb3 convenience library to make `sendtocontract` or `callcontract` calls. See the instructions in the Github repo here: https://github.com/bodhiproject/rweb3.js
 
 ### Using RegTest
-You can connect Qrypto to regtest. You will need to set the following in your qtumcore-node.json
+You can connect Qrypto to regtest. You will need to set the following in your runebasecore-node.json
 
 ```
-"qtum-explorer": {
+"runebase-explorer": {
   "apiPrefix": "insight-api",
   "routePrefix": "explorer",
   ...
  },
-"qtum-insight-api": {
+"runebase-insight-api": {
   "routePrefix": "insight-api",
   ...
 }  

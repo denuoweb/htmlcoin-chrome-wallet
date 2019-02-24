@@ -1,4 +1,4 @@
-import { WalletRPCProvider, Insight } from 'qtumjs-wallet';
+import { WalletRPCProvider, Insight } from 'runebasejs-wallet';
 
 import QryptoController from '.';
 import IController from './iController';

@@ -1,4 +1,4 @@
-import { Insight } from 'qtumjs-wallet';
+import { Insight } from 'runebasejs-wallet';
 import { map, find, partition, sumBy, includes, round } from 'lodash';
 import moment from 'moment';
 
