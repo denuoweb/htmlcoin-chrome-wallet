@@ -2,9 +2,9 @@ import { isEmpty, find, cloneDeep } from 'lodash';
 import { Wallet as RunebaseWallet } from 'runebasejs-wallet';
 import assert from 'assert';
 
-import QryptoController from '.';
+import RunebaseChromeController from '.';
 import IController from './iController';
-import { MESSAGE_TYPE, STORAGE, NETWORK_NAMES, QRYPTO_ACCOUNT_CHANGE } from '../../constants';
+import { MESSAGE_TYPE, STORAGE, NETWORK_NAMES, RUNEBASECHROME_ACCOUNT_CHANGE } from '../../constants';
 import Account from '../../models/Account';
 import Wallet from '../../models/Wallet';
 import { TRANSACTION_SPEED } from '../../constants';
@@ -40,7 +40,7 @@ export default class AccountController extends IController {
   private regtestAccounts: Account[] = INIT_VALUES.regtestAccounts;
   private getInfoInterval?: number = INIT_VALUES.getInfoInterval;
 
-  constructor(main: QryptoController) {
+  constructor(main: RunebaseChromeController) {
     super('account', main);
 
     chrome.runtime.onMessage.addListener(this.handleMessage);
@@ -270,11 +270,11 @@ export default class AccountController extends IController {
 
     /**
      * If we are restoring the session, i.e. the user is already logged in and is only
-     * reopening the popup, we don't need to send the SEND_INPAGE_QRYPTO_ACCOUNT_VALUES event to
+     * reopening the popup, we don't need to send the SEND_INPAGE_RUNEBASECHROME_ACCOUNT_VALUES event to
      * the inpage because window.qrypto.account has not changed.
      */
     if (!isSessionRestore) {
-      this.main.inpageAccount.sendInpageAccountAllPorts(QRYPTO_ACCOUNT_CHANGE.LOGIN);
+      this.main.inpageAccount.sendInpageAccountAllPorts(RUNEBASECHROME_ACCOUNT_CHANGE.LOGIN);
     }
     chrome.runtime.sendMessage({ type: MESSAGE_TYPE.ACCOUNT_LOGIN_SUCCESS });
   }
@@ -363,7 +363,7 @@ export default class AccountController extends IController {
       chrome.runtime.sendMessage({ type: MESSAGE_TYPE.GET_WALLET_INFO_RETURN, info: this.loggedInAccount.wallet.info });
 
       if (sendInpageUpdate) {
-        this.main.inpageAccount.sendInpageAccountAllPorts(QRYPTO_ACCOUNT_CHANGE.BALANCE_CHANGE);
+        this.main.inpageAccount.sendInpageAccountAllPorts(RUNEBASECHROME_ACCOUNT_CHANGE.BALANCE_CHANGE);
       }
 
       this.updateAndSendMaxRunebaseAmountToPopup();

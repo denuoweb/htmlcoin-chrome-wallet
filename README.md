@@ -1,24 +1,24 @@
 [![Build Status](https://travis-ci.org/bodhiproject/qrypto.svg?branch=master)](https://travis-ci.org/bodhiproject/qrypto)
 
-## Get Qrypto
+## Get RunebaseChrome
 Chome Web Store: https://chrome.google.com/webstore/detail/qrypto/hdmjdgjbehedbnjmljikggbmmbnbmlnd
 
 ## Web Dapp Usage
 
-Your dapp can use Qrypto to get information about a user's account status (whether they are logged into Qrypto, their account address, and balance). Qrypto also enables your dapp to listen to a window event for any changes to the user's account status.
+Your dapp can use RunebaseChrome to get information about a user's account status (whether they are logged into RunebaseChrome, their account address, and balance). RunebaseChrome also enables your dapp to listen to a window event for any changes to the user's account status.
 Your dapp can also use qrypto to make callcontract and sendtocontract calls to the blockchain. 
 
-### Connecting Qrypto
-To use any of the above functionality, your dapp will first need to initiate a long-lived connection between Qrypto's content script and background script.
-The code to do this is already in Qrypto, your dapp just needs to trigger the function by posting a window message.
-`window.postMessage({ message: { type: 'CONNECT_QRYPTO' }}, '*')`
+### Connecting RunebaseChrome
+To use any of the above functionality, your dapp will first need to initiate a long-lived connection between RunebaseChrome's content script and background script.
+The code to do this is already in RunebaseChrome, your dapp just needs to trigger the function by posting a window message.
+`window.postMessage({ message: { type: 'CONNECT_RUNEBASECHROME' }}, '*')`
 
 This will populate the `window.qrypto` object in your webpage. The `window.qrypto.account` values are automatically updated when a user logs in/out or the account balance changes.
 
 ```
 // window.qrypto
 {
-  rpcProvider: QryptoRPCProvider,
+  rpcProvider: RunebaseChromeRPCProvider,
   account: {
     loggedIn: true, 
     name: "2", 
@@ -29,42 +29,42 @@ This will populate the `window.qrypto` object in your webpage. The `window.qrypt
 }
 ```
 
-### Refreshing your page when Qrypto is installed or updated
-You will probably want to refresh your dapp webpage when Qrypto is installed or updated. This allows your dapp to rerun
-`window.postMessage({ message: { type: 'CONNECT_QRYPTO' }}, '*')`
-which would have previously failed to do anything while Qrypto was not yet installed. 
-When Qrypto is installed or updated it will send all existing tabs an event message. To have that event message refresh your dapp, add the following event listener.
+### Refreshing your page when RunebaseChrome is installed or updated
+You will probably want to refresh your dapp webpage when RunebaseChrome is installed or updated. This allows your dapp to rerun
+`window.postMessage({ message: { type: 'CONNECT_RUNEBASECHROME' }}, '*')`
+which would have previously failed to do anything while RunebaseChrome was not yet installed. 
+When RunebaseChrome is installed or updated it will send all existing tabs an event message. To have that event message refresh your dapp, add the following event listener.
 
 ```
-function handleQryptoInstalledOrUpdated(event) {
-  if (event.data.message && event.data.message.type === 'QRYPTO_INSTALLED_OR_UPDATED') {
+function handleRunebaseChromeInstalledOrUpdated(event) {
+  if (event.data.message && event.data.message.type === 'RUNEBASECHROME_INSTALLED_OR_UPDATED') {
       // Refresh the page
       window.location.reload()
   }
 }  
-window.addEventListener('message', handleQryptoInstalledOrUpdated, false);
+window.addEventListener('message', handleRunebaseChromeInstalledOrUpdated, false);
 ```
 
-### Qrypto User Account Status - Login/Logout
-After connecting Qrypto to your dapp, you can use an event listener to get notified of any changes to the user's account status(logging in/out, change in account balance).
+### RunebaseChrome User Account Status - Login/Logout
+After connecting RunebaseChrome to your dapp, you can use an event listener to get notified of any changes to the user's account status(logging in/out, change in account balance).
 
 ```
-function handleQryptoAcctChanged(event) {
-  if (event.data.message && event.data.message.type === "QRYPTO_ACCOUNT_CHANGED") {
+function handleRunebaseChromeAcctChanged(event) {
+  if (event.data.message && event.data.message.type === "RUNEBASECHROME_ACCOUNT_CHANGED") {
   	if (event.data.message.payload.error){
   		// handle error
   	}
     console.log("account:", event.data.message.payload.account)
   }
 }
-window.addEventListener('message', handleQryptoAcctChanged, false);
+window.addEventListener('message', handleRunebaseChromeAcctChanged, false);
 ```
 
 Note that `window.qrypto.account` will still get updated even if you don't set up this event listener; your Dapp just won't be notified of the changes.
 
-### Using QryptoProvider
+### Using RunebaseChromeProvider
 
-RPC calls can be directly made via `QryptoProvider` which is available to any webpage that connects to Qrypto.
+RPC calls can be directly made via `RunebaseChromeProvider` which is available to any webpage that connects to RunebaseChrome.
 
 **Make sure that `window.qrypto.rpcProvider` is defined before using it.**
 
@@ -96,7 +96,7 @@ function handleMessage(message) {
     const { result, error } = message.data.message.payload;
     
     if (error) {
-      if (error === 'Not logged in. Please log in to Qrypto first.') {
+      if (error === 'Not logged in. Please log in to RunebaseChrome first.') {
         // Show an alert dialog that the user needs to login first
         alert(error);
       } else {
@@ -115,7 +115,7 @@ window.addEventListener('message', handleMessage, false);
 You may also use our Rweb3 convenience library to make `sendtocontract` or `callcontract` calls. See the instructions in the Github repo here: https://github.com/bodhiproject/rweb3.js
 
 ### Using RegTest
-You can connect Qrypto to regtest. You will need to set the following in your runebasecore-node.json
+You can connect RunebaseChrome to regtest. You will need to set the following in your runebasecore-node.json
 
 ```
 "runebase-explorer": {
@@ -137,7 +137,7 @@ You can connect Qrypto to regtest. You will need to set the following in your ru
 4. At the top, click `Load Unpacked Extension`
 5. Navigate to your `qrypto/dist` folder
 6. Click `Select`. The extension should now be loaded
-7. Click on the Qrypto logo in your Chrome extensions bar to open
+7. Click on the RunebaseChrome logo in your Chrome extensions bar to open
 
 ## Security Flow
 **First Time Flow**

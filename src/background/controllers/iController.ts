@@ -1,10 +1,10 @@
-import QryptoController from '.';
+import RunebaseChromeController from '.';
 
 export default abstract class IController {
-  protected main: QryptoController;
+  protected main: RunebaseChromeController;
   private name: string;
 
-  constructor(name: string, main: QryptoController) {
+  constructor(name: string, main: RunebaseChromeController) {
     this.name = name;
     this.main = main;
     this.registerController();

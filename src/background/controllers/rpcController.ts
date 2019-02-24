@@ -1,13 +1,13 @@
 import { WalletRPCProvider, Insight } from 'runebasejs-wallet';
 
-import QryptoController from '.';
+import RunebaseChromeController from '.';
 import IController from './iController';
 import { MESSAGE_TYPE, RPC_METHOD } from '../../constants';
 import { IRPCCallResponse } from '../../types';
 import Config from '../../config';
 
 export default class RPCController extends IController {
-  constructor(main: QryptoController) {
+  constructor(main: RunebaseChromeController) {
     super('rpc', main);
 
     chrome.runtime.onMessage.addListener(this.handleMessage);

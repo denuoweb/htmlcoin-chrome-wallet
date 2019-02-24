@@ -1,6 +1,6 @@
-import QryptoController from '.';
+import RunebaseChromeController from '.';
 import IController from './iController';
-import { MESSAGE_TYPE, PORT_NAME, QRYPTO_ACCOUNT_CHANGE } from '../../constants';
+import { MESSAGE_TYPE, PORT_NAME, RUNEBASECHROME_ACCOUNT_CHANGE } from '../../constants';
 import { InpageAccount } from '../../models/InpageAccount';
 
 export default class InpageAccountController extends IController {
@@ -8,7 +8,7 @@ export default class InpageAccountController extends IController {
   // All connected ports from content script
   private ports: chrome.runtime.Port[] = [];
 
-  constructor(main: QryptoController) {
+  constructor(main: RunebaseChromeController) {
     super('inpageAccount', main);
     chrome.runtime.onConnect.addListener(this.handleLongLivedConnection);
 
@@ -16,21 +16,21 @@ export default class InpageAccountController extends IController {
   }
 
   // Send message to and update qrypto.account object of all registered ports
-  public sendInpageAccountAllPorts = (statusChangeReason: QRYPTO_ACCOUNT_CHANGE) => {
+  public sendInpageAccountAllPorts = (statusChangeReason: RUNEBASECHROME_ACCOUNT_CHANGE) => {
     for (const port of this.ports) {
       this.sendInpageAccount(port, statusChangeReason);
     }
   }
 
   // bg -> content script
-  public sendInpageAccount = (port: any, statusChangeReason: QRYPTO_ACCOUNT_CHANGE) => {
+  public sendInpageAccount = (port: any, statusChangeReason: RUNEBASECHROME_ACCOUNT_CHANGE) => {
     port.postMessage({
-      type: MESSAGE_TYPE.SEND_INPAGE_QRYPTO_ACCOUNT_VALUES,
+      type: MESSAGE_TYPE.SEND_INPAGE_RUNEBASECHROME_ACCOUNT_VALUES,
       accountWrapper: this.inpageAccountWrapper(statusChangeReason),
     });
   }
 
-  private inpageAccountWrapper = (statusChangeReason: QRYPTO_ACCOUNT_CHANGE) => {
+  private inpageAccountWrapper = (statusChangeReason: RUNEBASECHROME_ACCOUNT_CHANGE) => {
     const inpageAccount = new InpageAccount();
     if (this.main.account.loggedInAccount) {
       inpageAccount.loggedIn = true;
@@ -63,8 +63,8 @@ export default class InpageAccountController extends IController {
     */
     port.onDisconnect.addListener(this.handleDisconnect);
     port.onMessage.addListener((msg: any) => {
-      if (msg.type === MESSAGE_TYPE.GET_INPAGE_QRYPTO_ACCOUNT_VALUES) {
-        this.sendInpageAccount(port, QRYPTO_ACCOUNT_CHANGE.DAPP_CONNECTION);
+      if (msg.type === MESSAGE_TYPE.GET_INPAGE_RUNEBASECHROME_ACCOUNT_VALUES) {
+        this.sendInpageAccount(port, RUNEBASECHROME_ACCOUNT_CHANGE.DAPP_CONNECTION);
       }
     });
   }

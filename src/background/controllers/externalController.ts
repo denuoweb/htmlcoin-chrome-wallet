@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import QryptoController from '.';
+import RunebaseChromeController from '.';
 import IController from './iController';
 import { MESSAGE_TYPE } from '../../constants';
 
@@ -15,7 +15,7 @@ export default class ExternalController extends IController {
   private getPriceInterval?: number = INIT_VALUES.getPriceInterval;
   private runebasePriceUSD: number = INIT_VALUES.runebasePriceUSD;
 
-  constructor(main: QryptoController) {
+  constructor(main: RunebaseChromeController) {
     super('external', main);
     this.initFinished();
   }
@@ -51,8 +51,10 @@ export default class ExternalController extends IController {
   */
   private getRunebasePrice = async () => {
     try {
-      const jsonObj = await axios.get('https://api.coinmarketcap.com/v2/ticker/1684/');
-      this.runebasePriceUSD = jsonObj.data.data.quotes.USD.price;
+      //const jsonObj = await axios.get('https://api.coinmarketcap.com/v2/ticker/xxxx/');
+      const jsonObj = await axios.get('https://api.coinpaprika.com/v1/ticker/runes-runebase');
+      //this.runebasePriceUSD = jsonObj.data.data.quotes.USD.price;
+      this.runebasePriceUSD = jsonObj.data.price_usd;
 
       if (this.main.account.loggedInAccount
         && this.main.account.loggedInAccount.wallet

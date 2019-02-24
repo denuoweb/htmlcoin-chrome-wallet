@@ -1,11 +1,11 @@
 import { IExtensionAPIMessage, IRPCCallRequest } from '../types';
 import { TARGET_NAME, API_TYPE } from '../constants';
-import { QryptoRPCProvider } from './QryptoRPCProvider';
+import { RunebaseChromeRPCProvider } from './RunebaseChromeRPCProvider';
 import { showSignTxWindow } from './window';
 import { isMessageNotValid } from '../utils';
 import { IInpageAccountWrapper } from '../types';
 
-const qryptoProvider: QryptoRPCProvider = new QryptoRPCProvider();
+const qryptoProvider: RunebaseChromeRPCProvider = new RunebaseChromeRPCProvider();
 
 let qrypto: any = {
   rpcProvider: qryptoProvider,
@@ -28,7 +28,7 @@ function handlePortDisconnected() {
 }
 
 /**
- * Handles the sendToContract request originating from the QryptoRPCProvider and opens the sign tx window.
+ * Handles the sendToContract request originating from the RunebaseChromeRPCProvider and opens the sign tx window.
  * @param request SendToContract request.
  */
 const handleSendToContractRequest = (request: IRPCCallRequest) => {
@@ -50,7 +50,7 @@ function handleInpageMessage(event: MessageEvent) {
       break;
     case API_TYPE.RPC_RESPONSE:
       return qryptoProvider.handleRpcCallResponse(message.payload);
-    case API_TYPE.SEND_INPAGE_QRYPTO_ACCOUNT_VALUES:
+    case API_TYPE.SEND_INPAGE_RUNEBASECHROME_ACCOUNT_VALUES:
       const accountWrapper: IInpageAccountWrapper = message.payload;
       qrypto.account = accountWrapper.account;
       if (accountWrapper.error) {

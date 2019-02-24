@@ -1,5 +1,5 @@
-import QryptoController from './controllers';
+import RunebaseChromeController from './controllers';
 
 // Add instance to window for debugging
-const controller = new QryptoController();
+const controller = new RunebaseChromeController();
 Object.assign(window, { controller });

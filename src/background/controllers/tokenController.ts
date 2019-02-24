@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import { Insight } from 'runebasejs-wallet';
 const { Rweb3 } = require('rweb3');
 
-import QryptoController from '.';
+import RunebaseChromeController from '.';
 import IController from './iController';
 import { MESSAGE_TYPE, STORAGE, NETWORK_NAMES } from '../../constants';
 import QRCToken from '../../models/QRCToken';
@@ -27,7 +27,7 @@ export default class TokenController extends IController {
 
   private getBalancesInterval?: number = INIT_VALUES.getBalancesInterval;
 
-  constructor(main: QryptoController) {
+  constructor(main: RunebaseChromeController) {
     super('token', main);
 
     chrome.runtime.onMessage.addListener(this.handleMessage);

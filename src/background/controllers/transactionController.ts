@@ -2,7 +2,7 @@ import { Insight } from 'runebasejs-wallet';
 import { map, find, partition, sumBy, includes, round } from 'lodash';
 import moment from 'moment';
 
-import QryptoController from '.';
+import RunebaseChromeController from '.';
 import IController from './iController';
 import { MESSAGE_TYPE } from '../../constants';
 import Transaction from '../../models/Transaction';
@@ -19,7 +19,7 @@ export default class TransactionController extends IController {
 
   private getTransactionsInterval?: number = undefined;
 
-  constructor(main: QryptoController) {
+  constructor(main: RunebaseChromeController) {
     super('transaction', main);
 
     chrome.runtime.onMessage.addListener(this.handleMessage);
