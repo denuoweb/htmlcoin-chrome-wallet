@@ -51,9 +51,9 @@ export default class ExternalController extends IController {
   */
   private getRunebasePrice = async () => {
     try {
-      //const jsonObj = await axios.get('https://api.coinmarketcap.com/v2/ticker/xxxx/');
+      // const jsonObj = await axios.get('https://api.coinmarketcap.com/v2/ticker/xxxx/');
       const jsonObj = await axios.get('https://api.coinpaprika.com/v1/ticker/runes-runebase');
-      //this.runebasePriceUSD = jsonObj.data.data.quotes.USD.price;
+      // this.runebasePriceUSD = jsonObj.data.data.quotes.USD.price;
       this.runebasePriceUSD = jsonObj.data.price_usd;
 
       if (this.main.account.loggedInAccount

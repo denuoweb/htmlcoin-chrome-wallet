@@ -1,8 +1,8 @@
 import QRCToken from '../models/QRCToken';
 
 const testnetTokenList: QRCToken[] = [
-  new QRCToken('Bodhi Token', 'BOT', 8, 'a6dd0b0399dc6162cedde85ed50c6fa4a0dd44f1'),
-  new QRCToken('FENIX.CASH', 'FENIX', 8, '6ca21a86f3f42fc5ea7b4be746e56a1e964c0453'),
+  new QRCToken('Prediction Token', 'PRED', 8, 'a7489701415b46bdbd7e91dc5164cb50ae5dfe8f'),
+  new QRCToken('Fun Token', 'FUN', 8, '33c3c5736bc8b1f04d074f44568c350fe94e865e'),
 ];
 
 export default testnetTokenList;

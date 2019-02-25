@@ -7,7 +7,7 @@ import RunebaseChromeController from '.';
 import IController from './iController';
 import { MESSAGE_TYPE, STORAGE, NETWORK_NAMES } from '../../constants';
 import QRCToken from '../../models/QRCToken';
-import qrc20TokenABI from '../../contracts/qrc20TokenABI';
+import rrc223TokenABI from '../../contracts/rrc223TokenABI';
 import mainnetTokenList from '../../contracts/mainnetTokenList';
 import testnetTokenList from '../../contracts/testnetTokenList';
 import regtestTokenList from '../../contracts/regtestTokenList';
@@ -105,7 +105,7 @@ export default class TokenController extends IController {
 
     const methodName = 'balanceOf';
     const data = rweb3.encoder.constructData(
-      qrc20TokenABI,
+      rrc223TokenABI,
       methodName,
       [this.main.account.loggedInAccount.wallet.qjsWallet.address],
     );
@@ -118,7 +118,7 @@ export default class TokenController extends IController {
     }
 
     // Decode result
-    const decodedRes = rweb3.decoder.decodeCall(result, qrc20TokenABI, methodName);
+    const decodedRes = rweb3.decoder.decodeCall(result, rrc223TokenABI, methodName);
     const bnBal = decodedRes!.executionResult.formattedOutput[0]; // Returns as a BN instance
     const bigNumberBal = new BigNumber(bnBal.toString(10)); // Convert to BigNumber instance
     const balance = bigNumberBal.dividedBy(new BigNumber(10 ** token.decimals)).toNumber(); // Convert to regular denomination
@@ -147,33 +147,33 @@ export default class TokenController extends IController {
     try {
       // Get name
       let methodName = 'name';
-      let data = rweb3.encoder.constructData(qrc20TokenABI, methodName, []);
+      let data = rweb3.encoder.constructData(rrc223TokenABI, methodName, []);
       let { result, error }: IRPCCallResponse =
         await this.main.rpc.callContract(generateRequestId(), [contractAddress, data]);
       if (error) {
         throw Error(error);
       }
-      result = rweb3.decoder.decodeCall(result, qrc20TokenABI, methodName) as Insight.IContractCall;
+      result = rweb3.decoder.decodeCall(result, rrc223TokenABI, methodName) as Insight.IContractCall;
       const name = result.executionResult.formattedOutput[0];
 
       // Get symbol
       methodName = 'symbol';
-      data = rweb3.encoder.constructData(qrc20TokenABI, methodName, []);
+      data = rweb3.encoder.constructData(rrc223TokenABI, methodName, []);
       ({ result, error } = await this.main.rpc.callContract(generateRequestId(), [contractAddress, data]));
       if (error) {
         throw Error(error);
       }
-      result = rweb3.decoder.decodeCall(result, qrc20TokenABI, methodName) as Insight.IContractCall;
+      result = rweb3.decoder.decodeCall(result, rrc223TokenABI, methodName) as Insight.IContractCall;
       const symbol = result.executionResult.formattedOutput[0];
 
       // Get decimals
       methodName = 'decimals';
-      data = rweb3.encoder.constructData(qrc20TokenABI, methodName, []);
+      data = rweb3.encoder.constructData(rrc223TokenABI, methodName, []);
       ({ result, error } = await this.main.rpc.callContract(generateRequestId(), [contractAddress, data]));
       if (error) {
         throw Error(error);
       }
-      result = rweb3.decoder.decodeCall(result, qrc20TokenABI, methodName) as Insight.IContractCall;
+      result = rweb3.decoder.decodeCall(result, rrc223TokenABI, methodName) as Insight.IContractCall;
       const decimals = result.executionResult.formattedOutput[0];
 
       if (name && symbol && decimals) {
@@ -212,7 +212,7 @@ export default class TokenController extends IController {
                                 gasLimit: number, gasPrice: number ) => {
     // bn.js does not handle decimals well (Ex: BN(1.2) => 1 not 1.2) so we use BigNumber
     const bnAmount = new BigNumber(amount).times(new BigNumber(10 ** token.decimals));
-    const data = rweb3.encoder.constructData(qrc20TokenABI, 'transfer', [receiverAddress, bnAmount]);
+    const data = rweb3.encoder.constructData(rrc223TokenABI, 'transfer', [receiverAddress, bnAmount]);
     const args = [token.address, data, null, gasLimit, gasPrice];
     const { error } = await this.main.rpc.sendToContract(generateRequestId(), args);
 
