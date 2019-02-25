@@ -5,10 +5,10 @@ import { showSignTxWindow } from './window';
 import { isMessageNotValid } from '../utils';
 import { IInpageAccountWrapper } from '../types';
 
-const qryptoProvider: RunebaseChromeRPCProvider = new RunebaseChromeRPCProvider();
+const runebasechromeProvider: RunebaseChromeRPCProvider = new RunebaseChromeRPCProvider();
 
-let qrypto: any = {
-  rpcProvider: qryptoProvider,
+let runebasechrome: any = {
+  rpcProvider: runebasechromeProvider,
   account: null,
 };
 let signTxUrl: string;
@@ -18,12 +18,12 @@ window.addEventListener('message', handleInpageMessage, false);
 
 // expose apis
 Object.assign(window, {
-  qrypto,
+  runebasechrome,
 });
 
 function handlePortDisconnected() {
-  qrypto = undefined;
-  Object.assign(window, { qrypto });
+  runebasechrome = undefined;
+  Object.assign(window, { runebasechrome });
   window.removeEventListener('message', handleInpageMessage, false);
 }
 
@@ -49,14 +49,14 @@ function handleInpageMessage(event: MessageEvent) {
       handleSendToContractRequest(message.payload);
       break;
     case API_TYPE.RPC_RESPONSE:
-      return qryptoProvider.handleRpcCallResponse(message.payload);
+      return runebasechromeProvider.handleRpcCallResponse(message.payload);
     case API_TYPE.SEND_INPAGE_RUNEBASECHROME_ACCOUNT_VALUES:
       const accountWrapper: IInpageAccountWrapper = message.payload;
-      qrypto.account = accountWrapper.account;
+      runebasechrome.account = accountWrapper.account;
       if (accountWrapper.error) {
         throw accountWrapper.error;
       } else {
-        console.log('window.qrypto.account has been updated,\n Reason:',  accountWrapper.statusChangeReason);
+        console.log('window.runebasechrome.account has been updated,\n Reason:',  accountWrapper.statusChangeReason);
       }
       break;
     case API_TYPE.PORT_DISCONNECTED:

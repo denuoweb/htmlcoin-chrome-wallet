@@ -1,5 +1,5 @@
 {
-  "name": "qrypto",
+  "name": "Runebase-Chrome",
   "private": true,
   "scripts": {
     "clean": "rm -rf dist",

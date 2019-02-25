@@ -62,7 +62,7 @@ export default class SendStore {
   }
   @computed public get maxAmount(): number | undefined {
     if (this.token) {
-      if (this.token.symbol === 'RUNEBASE') {
+      if (this.token.symbol === 'RUNES') {
         return this.maxRunebaseSend;
       }
       return this.token!.balance;
@@ -81,7 +81,7 @@ export default class SendStore {
     chrome.runtime.onMessage.addListener(this.handleMessage);
     chrome.runtime.sendMessage({ type: MESSAGE_TYPE.GET_QRC_TOKEN_LIST }, (response: any) => {
       this.tokens = response;
-      this.tokens.unshift(new QRCToken('Runebase Token', 'RUNEBASE', 8, ''));
+      this.tokens.unshift(new QRCToken('Runebase Token', 'RUNES', 8, ''));
       this.tokens[0].balance = this.app.sessionStore.info ? this.app.sessionStore.info.balance : undefined;
       this.token = this.tokens[0];
     });
@@ -111,7 +111,7 @@ export default class SendStore {
     }
 
     this.sendState = SEND_STATE.SENDING;
-    if (this.token.symbol === 'RUNEBASE') {
+    if (this.token.symbol === 'RUNES') {
       chrome.runtime.sendMessage({
         type: MESSAGE_TYPE.SEND_TOKENS,
         receiverAddress: this.receiverAddress,

@@ -88,7 +88,7 @@ const TransactionList: SFC<any> = observer(({ classes, store: { accountDetailSto
           <Typography className={classes.txId}>{`txid: ${shortenTxid(id)}`}</Typography>
           <Typography className={classes.txTime}>{timestamp || '01-01-2018 00:00'}</Typography>
         </div>
-        <AmountInfo classes={classes} amount={amount} token="RUNEBASE" />
+        <AmountInfo classes={classes} amount={amount} token="RUNES" />
         <div>
           <KeyboardArrowRight className={classes.arrowRight} />
         </div>
@@ -165,7 +165,7 @@ const AmountInfo: SFC<any> = ({ classes, amount, token }: any) => (
     </div>
     {/* convertedValue && (
       <div className={classes.conversionContainer}>
-        <Typography className={classes.tokenType}>{`= ${convertedValue} RUNEBASE`}</Typography>
+        <Typography className={classes.tokenType}>{`= ${convertedValue} RUNES`}</Typography>
       </div>
     ) */}
   </div>

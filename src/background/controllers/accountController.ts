@@ -200,7 +200,7 @@ export default class AccountController extends IController {
     const file = new Blob([mnemonic], {type: 'text/plain'});
     const element = document.createElement('a');
     element.href = URL.createObjectURL(file);
-    element.download = `qrypto_${accountName}_${timestamp}.bak`;
+    element.download = `runebasechrome_${accountName}_${timestamp}.bak`;
     element.click();
 
     this.importMnemonic(accountName, mnemonic);
@@ -271,7 +271,7 @@ export default class AccountController extends IController {
     /**
      * If we are restoring the session, i.e. the user is already logged in and is only
      * reopening the popup, we don't need to send the SEND_INPAGE_RUNEBASECHROME_ACCOUNT_VALUES event to
-     * the inpage because window.qrypto.account has not changed.
+     * the inpage because window.runebasechrome.account has not changed.
      */
     if (!isSessionRestore) {
       this.main.inpageAccount.sendInpageAccountAllPorts(RUNEBASECHROME_ACCOUNT_CHANGE.LOGIN);

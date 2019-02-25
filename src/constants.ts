@@ -1,12 +1,12 @@
 export enum TARGET_NAME {
-  INPAGE = 'qrypto-inpage',
-  CONTENTSCRIPT = 'qrypto-contentscript',
-  BACKGROUND = 'qrypto-background',
+  INPAGE = 'runebasechrome-inpage',
+  CONTENTSCRIPT = 'runebasechrome-contentscript',
+  BACKGROUND = 'runebasechrome-background',
 }
 
 export enum PORT_NAME {
-  POPUP = 'qrypto-popup',
-  CONTENTSCRIPT = 'qrypto-contentscript',
+  POPUP = 'runebasechrome-popup',
+  CONTENTSCRIPT = 'runebasechrome-contentscript',
 }
 
 export enum RPC_METHOD {

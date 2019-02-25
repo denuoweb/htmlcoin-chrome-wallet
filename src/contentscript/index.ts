@@ -10,7 +10,7 @@ let port: any;
 // Add message listeners
 window.addEventListener('message', handleInPageMessage, false);
 chrome.runtime.onMessage.addListener(handleBackgroundScriptMessage);
-// Dapp developer triggers this event to set up window.qrypto
+// Dapp developer triggers this event to set up window.runebasechrome
 window.addEventListener('message', setupLongLivedConnection, false);
 
 // Create a long-lived connection to the background page and inject content scripts
@@ -50,7 +50,7 @@ async function setupLongLivedConnection(event: MessageEvent) {
 
 /*
 * This only partially resets the webpage to its pre-connected state. We remove the
-* event listeners and set window.qrypto back to undefined, but there is no
+* event listeners and set window.runebasechrome back to undefined, but there is no
 * way to uninject the content scripts. This is not a big deal though as without a
 * RunebaseChrome installation, the content scripts won't do anything (neither will the
 * event listeners, but we can remove them so we may as well).

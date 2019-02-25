@@ -15,7 +15,7 @@ export default class InpageAccountController extends IController {
     this.initFinished();
   }
 
-  // Send message to and update qrypto.account object of all registered ports
+  // Send message to and update runebasechrome.account object of all registered ports
   public sendInpageAccountAllPorts = (statusChangeReason: RUNEBASECHROME_ACCOUNT_CHANGE) => {
     for (const port of this.ports) {
       this.sendInpageAccount(port, statusChangeReason);

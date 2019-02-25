@@ -40,7 +40,7 @@ class AccountInfo extends Component<WithStyles & IProps, {}> {
         <Typography className={classes.address}>{info.addrStr}</Typography>
         <div className={classes.amountContainer}>
           <Typography className={classes.tokenAmount}>{info.balance}</Typography>
-          <Typography className={classes.token}>RUNEBASE</Typography>
+          <Typography className={classes.token}>RUNES</Typography>
           {hasRightArrow && <KeyboardArrowRight className={classes.rightArrow} />}
         </div>
         <Typography className={classes.balanceUSD}>{`${runebaseBalanceUSD} ${networkBalAnnotation}`}</Typography>

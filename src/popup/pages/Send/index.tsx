@@ -39,7 +39,7 @@ class Send extends Component<WithStyles & IProps, {}> {
             <ToField onEnterPress={this.onEnterPress} {...this.props} />
             <TokenField {...this.props} />
             <AmountField onEnterPress={this.onEnterPress} {...this.props} />
-            {this.props.store.sendStore.token && this.props.store.sendStore.token.symbol === 'RUNEBASE' ? (
+            {this.props.store.sendStore.token && this.props.store.sendStore.token.symbol === 'RUNES' ? (
                 <TransactionSpeedField {...this.props} />
             ) : (
               <div>
