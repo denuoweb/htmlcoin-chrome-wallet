@@ -1,78 +1,77 @@
-[![Build Status](https://travis-ci.org/bodhiproject/runebasechrome.svg?branch=master)](https://travis-ci.org/bodhiproject/runebasechrome)
 
-## Get RunebaseChrome
-Chome Web Store: https://chrome.google.com/webstore/detail/runebasechrome/hdmjdgjbehedbnjmljikggbmmbnbmlnd
+## Get HtmlcoinChrome
+Chome Web Store: https://chrome.google.com/webstore/detail/
 
 ## Web Dapp Usage
 
-Your dapp can use RunebaseChrome to get information about a user's account status (whether they are logged into RunebaseChrome, their account address, and balance). RunebaseChrome also enables your dapp to listen to a window event for any changes to the user's account status.
-Your dapp can also use runebasechrome to make callcontract and sendtocontract calls to the blockchain. 
+Your dapp can use HtmlcoinChrome to get information about a user's account status (whether they are logged into HtmlcoinChrome, their account address, and balance). HtmlcoinChrome also enables your dapp to listen to a window event for any changes to the user's account status.
+Your dapp can also use HtmlcoinChrome to make callcontract and sendtocontract calls to the blockchain. 
 
-### Connecting RunebaseChrome
-To use any of the above functionality, your dapp will first need to initiate a long-lived connection between RunebaseChrome's content script and background script.
-The code to do this is already in RunebaseChrome, your dapp just needs to trigger the function by posting a window message.
-`window.postMessage({ message: { type: 'CONNECT_RUNEBASECHROME' }}, '*')`
+### Connecting HtmlcoinChrome
+To use any of the above functionality, your dapp will first need to initiate a long-lived connection between HtmlcoinChrome's content script and background script.
+The code to do this is already in HtmlcoinChrome, your dapp just needs to trigger the function by posting a window message.
+`window.postMessage({ message: { type: 'CONNECT_HTMLCOINCHROME' }}, '*')`
 
-This will populate the `window.runebasechrome` object in your webpage. The `window.runebasechrome.account` values are automatically updated when a user logs in/out or the account balance changes.
+This will populate the `window.htmlcoinchrome` object in your webpage. The `window.htmlcoinchrome.account` values are automatically updated when a user logs in/out or the account balance changes.
 
 ```
-// window.runebasechrome
+// window.htmlcoinchrome
 {
-  rpcProvider: RunebaseChromeRPCProvider,
+  rpcProvider: HtmlcoinChromeRPCProvider,
   account: {
     loggedIn: true, 
     name: "2", 
     network: "TestNet", 
-    address: "qJHp6dUSmDShpEEMmwxqHPo7sFSdydSkPM", 
+    address: "hJHp6dUSmDShpEEMmwxqHPo7sFSdydSkPM", 
     balance: 49.10998413 
   }
 }
 ```
 
-### Refreshing your page when RunebaseChrome is installed or updated
-You will probably want to refresh your dapp webpage when RunebaseChrome is installed or updated. This allows your dapp to rerun
-`window.postMessage({ message: { type: 'CONNECT_RUNEBASECHROME' }}, '*')`
-which would have previously failed to do anything while RunebaseChrome was not yet installed. 
-When RunebaseChrome is installed or updated it will send all existing tabs an event message. To have that event message refresh your dapp, add the following event listener.
+### Refreshing your page when HtmlcoinChrome is installed or updated
+You will probably want to refresh your dapp webpage when HtmlcoinChrome is installed or updated. This allows your dapp to rerun
+`window.postMessage({ message: { type: 'CONNECT_HTMLCOINCHROME' }}, '*')`
+which would have previously failed to do anything while HtmlcoinChrome was not yet installed. 
+When HtmlcoinChrome is installed or updated it will send all existing tabs an event message. To have that event message refresh your dapp, add the following event listener.
 
 ```
-function handleRunebaseChromeInstalledOrUpdated(event) {
-  if (event.data.message && event.data.message.type === 'RUNEBASECHROME_INSTALLED_OR_UPDATED') {
+function handleHtmlcoinChromeInstalledOrUpdated(event) {
+  if (event.data.message && event.data.message.type === 'HTMLCOINCHROME_INSTALLED_OR_UPDATED') {
       // Refresh the page
       window.location.reload()
   }
 }  
-window.addEventListener('message', handleRunebaseChromeInstalledOrUpdated, false);
+window.addEventListener('message', handleHtmlcoinChromeInstalledOrUpdated, false);
 ```
 
-### RunebaseChrome User Account Status - Login/Logout
-After connecting RunebaseChrome to your dapp, you can use an event listener to get notified of any changes to the user's account status(logging in/out, change in account balance).
+### HtmlcoinChrome User Account Status - Login/Logout
+After connecting HtmlcoinChrome to your dapp, you can use an event listener to get notified of any changes to the user's account status(logging in/out, change in account balance).
 
 ```
-function handleRunebaseChromeAcctChanged(event) {
-  if (event.data.message && event.data.message.type === "RUNEBASECHROME_ACCOUNT_CHANGED") {
+function handleHtmlcoinChromeAcctChanged(event) {
+  if (event.data.message && event.data.message.type === "HTMLCOINCHROME_ACCOUNT_CHANGED") {
   	if (event.data.message.payload.error){
   		// handle error
   	}
     console.log("account:", event.data.message.payload.account)
   }
 }
-window.addEventListener('message', handleRunebaseChromeAcctChanged, false);
+window.addEventListener('message', handleHtmlcoinChromeAcctChanged, false);
 ```
 
-Note that `window.runebasechrome.account` will still get updated even if you don't set up this event listener; your Dapp just won't be notified of the changes.
+Note that `window.htmlcoinchrome.account` will still get updated even if you don't set up this event listener; your Dapp just won't be notified of the changes.
 
-### Using RunebaseChromeProvider
+### Using HtmlcoinChromeProvider
 
-RPC calls can be directly made via `RunebaseChromeProvider` which is available to any webpage that connects to RunebaseChrome.
+RPC calls can be directly made via `HtmlcoinChromeProvider` which is available to any webpage that connects to HtmlcoinChrome.
 
-**Make sure that `window.runebasechrome.rpcProvider` is defined before using it.**
+**Make sure that `window.htmlcoinchrome.rpcProvider` is defined before using it.**
 
 ```
 // callcontract
 const contractAddress = 'a6dd0b0399dc6162cedde85ed50c6fa4a0dd44f1';
 const data = '06fdde03';
-window.runebasechrome.rpcProvider.rawCall(
+window.htmlcoinchrome.rpcProvider.rawCall(
   'callcontract',
   [contractAddress, data]
 ).then((res) => console.log(res));
@@ -80,23 +79,23 @@ window.runebasechrome.rpcProvider.rawCall(
 // sendtocontract
 const contractAddress = '49a941c5259e4e6ef9ac4a2a6716c1717ce0ffb6';
 const data = 'd0821b0e0000000000000000000000000000000000000000000000000000000000000001';
-const runebaseAmt = 1; // optional. defaults to 0.
+const htmlcoinAmt = 1; // optional. defaults to 0.
 const gasLimit = 200000; // optional. defaults to 200000.
 const gasPrice = 40; // optional. defaults to 40 (satoshi).
-window.runebasechromeProvider.rawCall(
+window.htmlcoinchromeProvider.rawCall(
   'sendtocontract',
-  [contractAddress, data, runebaseAmt, gasLimit, gasPrice],
+  [contractAddress, data, htmlcoinAmt, gasLimit, gasPrice],
 );
 
 // Handle incoming messages
 function handleMessage(message) {
-  if (message.data.target == 'runebasechrome-inpage') {
+  if (message.data.target == 'htmlcoinchrome-inpage') {
     // result: object
     // error: string
     const { result, error } = message.data.message.payload;
     
     if (error) {
-      if (error === 'Not logged in. Please log in to RunebaseChrome first.') {
+      if (error === 'Not logged in. Please log in to HtmlcoinChrome first.') {
         // Show an alert dialog that the user needs to login first
         alert(error);
       } else {
@@ -111,20 +110,20 @@ function handleMessage(message) {
 window.addEventListener('message', handleMessage, false);
 ```
 
-### Using Rweb3
-You may also use our Rweb3 convenience library to make `sendtocontract` or `callcontract` calls. See the instructions in the Github repo here: https://github.com/bodhiproject/rweb3.js
+### Using Hweb3
+You may also use our Hweb3 convenience library to make `sendtocontract` or `callcontract` calls. See the instructions in the Github repo here: https://github.com/denuoweb/hweb3.js
 
 ### Using RegTest
-You can connect RunebaseChrome to regtest. You will need to set the following in your runebasecore-node.json
+You can connect HtmlcoinChrome to regtest. You will need to set the following in your htmlcoincore-node.json
 
 ```
-"runebase-explorer": {
-  "apiPrefix": "insight-api",
+"htmlcoin-explorer": {
+  "apiPrefix": "api",
   "routePrefix": "explorer",
   ...
  },
-"runebase-insight-api": {
-  "routePrefix": "insight-api",
+"htmlcoin-insight-api": {
+  "routePrefix": "api",
   ...
 }  
 ```
@@ -135,9 +134,9 @@ You can connect RunebaseChrome to regtest. You will need to set the following in
 2. Open Chrome and load URL: `chrome://extensions`
 3. Turn `Developer mode` on in the top right
 4. At the top, click `Load Unpacked Extension`
-5. Navigate to your `runebasechrome/dist` folder
+5. Navigate to your `htmlcoinchrome/dist` folder
 6. Click `Select`. The extension should now be loaded
-7. Click on the RunebaseChrome logo in your Chrome extensions bar to open
+7. Click on the HtmlcoinChrome logo in your Chrome extensions bar to open
 
 ## Security Flow
 **First Time Flow**
