@@ -1,8 +1,8 @@
 import { utils } from 'ethers';
-import { Insight } from 'runebasejs-wallet';
-import { ISendTxOptions } from 'runebasejs-wallet/lib/tx';
+import { Insight } from 'htmlcoinjs-wallet';
+import { ISendTxOptions } from 'htmlcoinjs-wallet/lib/tx';
 
-import { API_TYPE, TARGET_NAME, INTERNAL_API_TYPE, RUNEBASECHROME_ACCOUNT_CHANGE } from './constants';
+import { API_TYPE, TARGET_NAME, INTERNAL_API_TYPE, HTMLCOINCHROME_ACCOUNT_CHANGE } from './constants';
 import { Transaction, InpageAccount } from './models';
 
 export interface IExtensionMessageData<T> {
@@ -51,5 +51,5 @@ export interface ISigner {
 export interface IInpageAccountWrapper {
   account: InpageAccount;
   error: Error;
-  statusChangeReason: RUNEBASECHROME_ACCOUNT_CHANGE;
+  statusChangeReason: HTMLCOINCHROME_ACCOUNT_CHANGE;
 }
