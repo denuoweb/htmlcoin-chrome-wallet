@@ -1,5 +1,5 @@
 import { isFinite } from 'lodash';
-import { validatePrivateKey } from 'runebasejs-wallet';
+import { validatePrivateKey } from 'htmlcoinjs-wallet';
 
 import { TARGET_NAME } from '../constants';
 import { IExtensionMessageData } from '../types';
@@ -29,8 +29,8 @@ export const generateRandomId = (): string => {
 /*
 * Validates the Runebase address based on length and starting character.
 * @param isMainNet {boolean} Flag if is a mainnet address (or else testnet address).
-* @param address {string} The Runebase address to validate.
-* @return {boolean} Returns if it is a valid Runebase address.
+* @param address {string} The htmlcoin address to validate.
+* @return {boolean} Returns if it is a valid htmlcoin address.
 */
 export const isValidAddress = (isMainNet: boolean, address?: string) => {
   if (!address) {
@@ -40,9 +40,9 @@ export const isValidAddress = (isMainNet: boolean, address?: string) => {
     return false;
   }
   if (isMainNet) {
-    return address.startsWith('R');
+    return address.startsWith('H');
   }
-  return address.startsWith('5');
+  return address.startsWith('h');
 };
 
 export const isValidPrivateKey = (address?: string) => {
