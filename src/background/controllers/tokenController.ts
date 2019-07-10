@@ -1,13 +1,13 @@
 import { each, findIndex, isEmpty } from 'lodash';
 import BigNumber from 'bignumber.js';
-import { Insight } from 'runebasejs-wallet';
-const { Rweb3 } = require('rweb3');
+import { Insight } from 'htmlcoinjs-wallet';
+const { Hweb3 } = require('hweb3');
 
-import RunebaseChromeController from '.';
+import HtmlcoinChromeController from '.';
 import IController from './iController';
 import { MESSAGE_TYPE, STORAGE, NETWORK_NAMES } from '../../constants';
 import QRCToken from '../../models/QRCToken';
-import rrc223TokenABI from '../../contracts/rrc223TokenABI';
+import hrc223TokenABI from '../../contracts/hrc223TokenABI';
 import mainnetTokenList from '../../contracts/mainnetTokenList';
 import testnetTokenList from '../../contracts/testnetTokenList';
 import regtestTokenList from '../../contracts/regtestTokenList';
@@ -18,7 +18,7 @@ const INIT_VALUES = {
   tokens: undefined,
   getBalancesInterval: undefined,
 };
-const rweb3 = new Rweb3('null');
+const hweb3 = new Hweb3('null');
 
 export default class TokenController extends IController {
   private static GET_BALANCES_INTERVAL_MS: number = 60000;
@@ -27,7 +27,7 @@ export default class TokenController extends IController {
 
   private getBalancesInterval?: number = INIT_VALUES.getBalancesInterval;
 
-  constructor(main: RunebaseChromeController) {
+  constructor(main: HtmlcoinChromeController) {
     super('token', main);
 
     chrome.runtime.onMessage.addListener(this.handleMessage);
@@ -104,8 +104,8 @@ export default class TokenController extends IController {
     }
 
     const methodName = 'balanceOf';
-    const data = rweb3.encoder.constructData(
-      rrc223TokenABI,
+    const data = hweb3.encoder.constructData(
+      hrc223TokenABI,
       methodName,
       [this.main.account.loggedInAccount.wallet.qjsWallet.address],
     );
@@ -118,7 +118,7 @@ export default class TokenController extends IController {
     }
 
     // Decode result
-    const decodedRes = rweb3.decoder.decodeCall(result, rrc223TokenABI, methodName);
+    const decodedRes = hweb3.decoder.decodeCall(result, hrc223TokenABI, methodName);
     const bnBal = decodedRes!.executionResult.formattedOutput[0]; // Returns as a BN instance
     const bigNumberBal = new BigNumber(bnBal.toString(10)); // Convert to BigNumber instance
     const balance = bigNumberBal.dividedBy(new BigNumber(10 ** token.decimals)).toNumber(); // Convert to regular denomination
@@ -147,33 +147,33 @@ export default class TokenController extends IController {
     try {
       // Get name
       let methodName = 'name';
-      let data = rweb3.encoder.constructData(rrc223TokenABI, methodName, []);
+      let data = hweb3.encoder.constructData(hrc223TokenABI, methodName, []);
       let { result, error }: IRPCCallResponse =
         await this.main.rpc.callContract(generateRequestId(), [contractAddress, data]);
       if (error) {
         throw Error(error);
       }
-      result = rweb3.decoder.decodeCall(result, rrc223TokenABI, methodName) as Insight.IContractCall;
+      result = hweb3.decoder.decodeCall(result, hrc223TokenABI, methodName) as Insight.IContractCall;
       const name = result.executionResult.formattedOutput[0];
 
       // Get symbol
       methodName = 'symbol';
-      data = rweb3.encoder.constructData(rrc223TokenABI, methodName, []);
+      data = hweb3.encoder.constructData(hrc223TokenABI, methodName, []);
       ({ result, error } = await this.main.rpc.callContract(generateRequestId(), [contractAddress, data]));
       if (error) {
         throw Error(error);
       }
-      result = rweb3.decoder.decodeCall(result, rrc223TokenABI, methodName) as Insight.IContractCall;
+      result = hweb3.decoder.decodeCall(result, hrc223TokenABI, methodName) as Insight.IContractCall;
       const symbol = result.executionResult.formattedOutput[0];
 
       // Get decimals
       methodName = 'decimals';
-      data = rweb3.encoder.constructData(rrc223TokenABI, methodName, []);
+      data = hweb3.encoder.constructData(hrc223TokenABI, methodName, []);
       ({ result, error } = await this.main.rpc.callContract(generateRequestId(), [contractAddress, data]));
       if (error) {
         throw Error(error);
       }
-      result = rweb3.decoder.decodeCall(result, rrc223TokenABI, methodName) as Insight.IContractCall;
+      result = hweb3.decoder.decodeCall(result, hrc223TokenABI, methodName) as Insight.IContractCall;
       const decimals = result.executionResult.formattedOutput[0];
 
       if (name && symbol && decimals) {
@@ -212,7 +212,7 @@ export default class TokenController extends IController {
                                 gasLimit: number, gasPrice: number ) => {
     // bn.js does not handle decimals well (Ex: BN(1.2) => 1 not 1.2) so we use BigNumber
     const bnAmount = new BigNumber(amount).times(new BigNumber(10 ** token.decimals));
-    const data = rweb3.encoder.constructData(rrc223TokenABI, 'transfer', [receiverAddress, bnAmount]);
+    const data = hweb3.encoder.constructData(hrc223TokenABI, 'transfer', [receiverAddress, bnAmount]);
     const args = [token.address, data, null, gasLimit, gasPrice];
     const { error } = await this.main.rpc.sendToContract(generateRequestId(), args);
 
