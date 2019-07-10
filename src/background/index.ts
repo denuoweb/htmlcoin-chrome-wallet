@@ -1,5 +1,5 @@
-import RunebaseChromeController from './controllers';
+import HtmlcoinChromeController from './controllers';
 
 // Add instance to window for debugging
-const controller = new RunebaseChromeController();
+const controller = new HtmlcoinChromeController();
 Object.assign(window, { controller });
