@@ -1,14 +1,14 @@
-import { networks, Network } from 'runebasejs-wallet';
+import { networks, Network } from 'htmlcoinjs-wallet';
 
-import RunebaseChromeController from '.';
+import HtmlcoinChromeController from '.';
 import IController from './iController';
 import { MESSAGE_TYPE, STORAGE, NETWORK_NAMES } from '../../constants';
 import QryNetwork from '../../models/QryNetwork';
 
 export default class NetworkController extends IController {
   public static NETWORKS: QryNetwork[] = [
-    new QryNetwork(NETWORK_NAMES.MAINNET, networks.mainnet, 'https://explorer.runebase.io/tx'),
-    new QryNetwork(NETWORK_NAMES.TESTNET, networks.testnet, 'https://testnet.runebase.io/tx'),
+    new QryNetwork(NETWORK_NAMES.MAINNET, networks.mainnet, 'https://explorer.htmlcoin.com/tx'),
+    new QryNetwork(NETWORK_NAMES.TESTNET, networks.testnet, 'https://testnet.htmlcoin.com/tx'),
     new QryNetwork(NETWORK_NAMES.REGTEST, networks.regtest, 'http://localhost:3001/tx'),
   ];
 
@@ -27,7 +27,7 @@ export default class NetworkController extends IController {
 
   private networkIndex: number = 0;
 
-  constructor(main: RunebaseChromeController) {
+  constructor(main: HtmlcoinChromeController) {
     super('network', main);
 
     chrome.runtime.onMessage.addListener(this.handleMessage);
