@@ -1,8 +1,8 @@
-import RunebaseChromeController from '.';
+import HtmlcoinChromeController from '.';
 import IController from './iController';
 
 export default class OnInstallController extends IController {
-  constructor(main: RunebaseChromeController) {
+  constructor(main: HtmlcoinChromeController) {
     super('onInstall', main);
 
     /*
@@ -42,11 +42,11 @@ export default class OnInstallController extends IController {
   }
 
   private refreshTab(tab: chrome.tabs.Tab) {
-     // Tells the content script to post a msg to the inpage window letting it know that RunebaseChrome was installed or updated.
+     // Tells the content script to post a msg to the inpage window letting it know that HtmlcoinChrome was installed or updated.
      chrome.tabs.executeScript(tab.id!, {code:
       `window.postMessage(
         {
-          message: { type: 'RUNEBASECHROME_INSTALLED_OR_UPDATED' }
+          message: { type: 'HTMLCOINCHROME_INSTALLED_OR_UPDATED' }
         },
         '*'
       )`,
