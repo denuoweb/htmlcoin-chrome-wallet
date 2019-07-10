@@ -1,8 +1,8 @@
-import { Insight } from 'runebasejs-wallet';
+import { Insight } from 'htmlcoinjs-wallet';
 import { map, find, partition, sumBy, includes, round } from 'lodash';
 import moment from 'moment';
 
-import RunebaseChromeController from '.';
+import HtmlcoinChromeController from '.';
 import IController from './iController';
 import { MESSAGE_TYPE } from '../../constants';
 import Transaction from '../../models/Transaction';
@@ -19,7 +19,7 @@ export default class TransactionController extends IController {
 
   private getTransactionsInterval?: number = undefined;
 
-  constructor(main: RunebaseChromeController) {
+  constructor(main: HtmlcoinChromeController) {
     super('transaction', main);
 
     chrome.runtime.onMessage.addListener(this.handleMessage);
