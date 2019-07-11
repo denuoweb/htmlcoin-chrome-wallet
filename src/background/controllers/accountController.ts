@@ -1,10 +1,10 @@
 import { isEmpty, find, cloneDeep } from 'lodash';
-import { Wallet as RunebaseWallet } from 'runebasejs-wallet';
+import { Wallet as HtmlcoinWallet } from 'htmlcoinjs-wallet';
 import assert from 'assert';
 
-import RunebaseChromeController from '.';
+import HtmlcoinChromeController from '.';
 import IController from './iController';
-import { MESSAGE_TYPE, STORAGE, NETWORK_NAMES, RUNEBASECHROME_ACCOUNT_CHANGE } from '../../constants';
+import { MESSAGE_TYPE, STORAGE, NETWORK_NAMES, HTMLCOINCHROME_ACCOUNT_CHANGE } from '../../constants';
 import Account from '../../models/Account';
 import Wallet from '../../models/Wallet';
 import { TRANSACTION_SPEED } from '../../constants';
@@ -40,7 +40,7 @@ export default class AccountController extends IController {
   private regtestAccounts: Account[] = INIT_VALUES.regtestAccounts;
   private getInfoInterval?: number = INIT_VALUES.getInfoInterval;
 
-  constructor(main: RunebaseChromeController) {
+  constructor(main: HtmlcoinChromeController) {
     super('account', main);
 
     chrome.runtime.onMessage.addListener(this.handleMessage);
@@ -109,7 +109,7 @@ export default class AccountController extends IController {
   * @param accountName The account name for the new wallet account.
   * @param mnemonic The mnemonic to derive the wallet from.
   */
-  public addAccountAndLogin = async (accountName: string, privateKeyHash: string, wallet: RunebaseWallet) => {
+  public addAccountAndLogin = async (accountName: string, privateKeyHash: string, wallet: HtmlcoinWallet) => {
     this.loggedInAccount = new Account(accountName, privateKeyHash);
     this.loggedInAccount.wallet = new Wallet(wallet);
 
@@ -200,7 +200,7 @@ export default class AccountController extends IController {
     const file = new Blob([mnemonic], {type: 'text/plain'});
     const element = document.createElement('a');
     element.href = URL.createObjectURL(file);
-    element.download = `runebasechrome_${accountName}_${timestamp}.bak`;
+    element.download = `htmlcoinchrome_${accountName}_${timestamp}.bak`;
     element.click();
 
     this.importMnemonic(accountName, mnemonic);
@@ -270,11 +270,11 @@ export default class AccountController extends IController {
 
     /**
      * If we are restoring the session, i.e. the user is already logged in and is only
-     * reopening the popup, we don't need to send the SEND_INPAGE_RUNEBASECHROME_ACCOUNT_VALUES event to
-     * the inpage because window.runebasechrome.account has not changed.
+     * reopening the popup, we don't need to send the SEND_INPAGE_HTMLCOINCHROME_ACCOUNT_VALUES event to
+     * the inpage because window.htmlcoinchrome.account has not changed.
      */
     if (!isSessionRestore) {
-      this.main.inpageAccount.sendInpageAccountAllPorts(RUNEBASECHROME_ACCOUNT_CHANGE.LOGIN);
+      this.main.inpageAccount.sendInpageAccountAllPorts(HTMLCOINCHROME_ACCOUNT_CHANGE.LOGIN);
     }
     chrome.runtime.sendMessage({ type: MESSAGE_TYPE.ACCOUNT_LOGIN_SUCCESS });
   }
@@ -293,7 +293,7 @@ export default class AccountController extends IController {
   * Recovers the wallet instance from an encrypted private key.
   * @param privateKeyHash The private key hash to recover the wallet from.
   */
-  private recoverFromPrivateKeyHash(privateKeyHash: string): RunebaseWallet {
+  private recoverFromPrivateKeyHash(privateKeyHash: string): HtmlcoinWallet {
     assert(privateKeyHash, 'invalid privateKeyHash');
 
     const network = this.main.network.network;
@@ -304,7 +304,7 @@ export default class AccountController extends IController {
     );
   }
 
-  private getPrivateKeyHash(wallet: RunebaseWallet) {
+  private getPrivateKeyHash(wallet: HtmlcoinWallet) {
     return wallet.toEncryptedPrivateKey(
       this.main.crypto.validPasswordHash,
       AccountController.SCRYPT_PARAMS_PRIV_KEY,
@@ -363,10 +363,10 @@ export default class AccountController extends IController {
       chrome.runtime.sendMessage({ type: MESSAGE_TYPE.GET_WALLET_INFO_RETURN, info: this.loggedInAccount.wallet.info });
 
       if (sendInpageUpdate) {
-        this.main.inpageAccount.sendInpageAccountAllPorts(RUNEBASECHROME_ACCOUNT_CHANGE.BALANCE_CHANGE);
+        this.main.inpageAccount.sendInpageAccountAllPorts(HTMLCOINCHROME_ACCOUNT_CHANGE.BALANCE_CHANGE);
       }
 
-      this.updateAndSendMaxRunebaseAmountToPopup();
+      this.updateAndSendMaxHtmlcoinAmountToPopup();
     }
   }
 
@@ -383,7 +383,7 @@ export default class AccountController extends IController {
 
   /*
   * Executes a sendtoaddress.
-  * @param receiverAddress The address to send Runebase to.
+  * @param receiverAddress The address to send Htmlcoin to.
   * @param amount The amount to send.
   */
   private sendTokens = async (receiverAddress: string, amount: number, transactionSpeed: TRANSACTION_SPEED) => {
@@ -402,7 +402,7 @@ export default class AccountController extends IController {
         [TRANSACTION_SPEED.NORMAL]: 500,
         [TRANSACTION_SPEED.SLOW]: 500,
       };
-      const feeRate = rates[transactionSpeed]; // satoshi/byte; 500 satoshi/byte == .005 RUNEBASE/KB
+      const feeRate = rates[transactionSpeed]; // satoshi/byte; 500 satoshi/byte == .005 HTMLCOIN/KB
       if (!feeRate) {
         throw Error('feeRate not set');
       }
@@ -416,23 +416,23 @@ export default class AccountController extends IController {
   }
 
   /**
-   * We update the maxRunebase amount under 2 scnearios
-   * 1 - When wallet.info has been updated because a new balance has a new maxRunebaseSend
-   * 2 - Whenever the maxRunebaseSend is requested, because even if the balance does not
-   * change, the available UTXOs can change(which causes a change in maxRunebaseSend).
-   * For instance when a user sends Runebase, but that transaction has not confirmed yet,
-   * the balance will not change, but calcMaxRunebaseSend is able to account for those
-   * unconfirmed UTXOs and update maxRunebaseSend accordingly.
+   * We update the maxHtmlcoin amount under 2 scnearios
+   * 1 - When wallet.info has been updated because a new balance has a new maxHtmlcoinSend
+   * 2 - Whenever the maxHtmlcoinSend is requested, because even if the balance does not
+   * change, the available UTXOs can change(which causes a change in maxHtmlcoinSend).
+   * For instance when a user sends Htmlcoin, but that transaction has not confirmed yet,
+   * the balance will not change, but calcMaxHtmlcoinSend is able to account for those
+   * unconfirmed UTXOs and update maxHtmlcoinSend accordingly.
    */
-  private updateAndSendMaxRunebaseAmountToPopup = async () => {
+  private updateAndSendMaxHtmlcoinAmountToPopup = async () => {
     if (!this.loggedInAccount || !this.loggedInAccount.wallet || !this.loggedInAccount.wallet.qjsWallet) {
       throw Error('Cannot calculate max balance with no wallet instance.');
     }
 
-    const calcMQSPr = this.loggedInAccount.wallet.calcMaxRunebaseSend(this.main.network.networkName);
+    const calcMQSPr = this.loggedInAccount.wallet.calcMaxHtmlcoinSend(this.main.network.networkName);
     calcMQSPr.then(() => {
-      chrome.runtime.sendMessage({ type: MESSAGE_TYPE.GET_MAX_RUNEBASE_SEND_RETURN,
-        maxRunebaseAmount: this.loggedInAccount!.wallet!.maxRunebaseSend });
+      chrome.runtime.sendMessage({ type: MESSAGE_TYPE.GET_MAX_HTMLCOIN_SEND_RETURN,
+        maxHtmlcoinAmount: this.loggedInAccount!.wallet!.maxHtmlcoinSend });
     });
   }
 
@@ -482,15 +482,15 @@ export default class AccountController extends IController {
           sendResponse(this.loggedInAccount && this.loggedInAccount.wallet
             ? this.loggedInAccount.wallet.info : undefined);
           break;
-        case MESSAGE_TYPE.GET_RUNEBASE_USD:
+        case MESSAGE_TYPE.GET_HTMLCOIN_USD:
           sendResponse(this.loggedInAccount && this.loggedInAccount.wallet
-            ? this.loggedInAccount.wallet.runebaseUSD : undefined);
+            ? this.loggedInAccount.wallet.HtmlcoinUSD : undefined);
           break;
         case MESSAGE_TYPE.VALIDATE_WALLET_NAME:
           sendResponse(this.isWalletNameTaken(request.name));
           break;
-        case MESSAGE_TYPE.GET_MAX_RUNEBASE_SEND:
-          this.updateAndSendMaxRunebaseAmountToPopup();
+        case MESSAGE_TYPE.GET_MAX_HTMLCOIN_SEND:
+          this.updateAndSendMaxHtmlcoinAmountToPopup();
           break;
         default:
           break;
