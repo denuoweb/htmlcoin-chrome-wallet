@@ -12,7 +12,7 @@ import SessionController from './sessionController';
 import OnInstallController from './onInstallController';
 import { MESSAGE_TYPE } from '../../constants';
 
-export default class RunebaseChromeController {
+export default class HtmlcoinChromeController {
   public crypto: CryptoController;
   public token: TokenController;
   public account: AccountController;
