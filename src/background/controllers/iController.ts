@@ -1,10 +1,10 @@
-import RunebaseChromeController from '.';
+import HtmlcoinChromeController from '.';
 
 export default abstract class IController {
-  protected main: RunebaseChromeController;
+  protected main: HtmlcoinChromeController;
   private name: string;
 
-  constructor(name: string, main: RunebaseChromeController) {
+  constructor(name: string, main: HtmlcoinChromeController) {
     this.name = name;
     this.main = main;
     this.registerController();
