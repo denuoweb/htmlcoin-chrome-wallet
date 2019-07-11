@@ -1,19 +1,19 @@
 import { action } from 'mobx';
-import { Wallet as RunebaseWallet, Insight, WalletRPCProvider } from 'runebasejs-wallet';
+import { Wallet as HtmlcoinWallet, Insight, WalletRPCProvider } from 'htmlcoinjs-wallet';
 import deepEqual from 'deep-equal';
 
 import { ISigner } from '../types';
-import { ISendTxOptions } from 'runebasejs-wallet/lib/tx';
+import { ISendTxOptions } from 'htmlcoinjs-wallet/lib/tx';
 import { RPC_METHOD, NETWORK_NAMES } from '../constants';
 
 export default class Wallet implements ISigner {
-  public qjsWallet?: RunebaseWallet;
+  public qjsWallet?: HtmlcoinWallet;
   public rpcProvider?: WalletRPCProvider;
   public info?: Insight.IGetInfo;
-  public runebaseUSD?: number;
-  public maxRunebaseSend?: number;
+  public htmlcoinUSD?: number;
+  public maxHtmlcoinSend?: number;
 
-  constructor(qjsWallet: RunebaseWallet) {
+  constructor(qjsWallet: HtmlcoinWallet) {
     this.qjsWallet = qjsWallet;
     this.rpcProvider = new WalletRPCProvider(this.qjsWallet);
   }
@@ -55,13 +55,13 @@ export default class Wallet implements ISigner {
     return false;
   }
 
-  // @param amount: (unit - whole RUNEBASE)
+  // @param amount: (unit - whole HTMLCOIN)
   public send = async (to: string, amount: number, options: ISendTxOptions): Promise<Insight.ISendRawTxResult> => {
     if (!this.qjsWallet) {
       throw Error('Cannot send without wallet.');
     }
 
-    // convert amount units from whole RUNEBASE => SATOSHI RUNEBASE
+    // convert amount units from whole HTMLCOIN => SATOSHI HTMLCOIN
     return await this.qjsWallet!.send(to, amount * 1e8, { feeRate: options.feeRate });
   }
 
@@ -80,22 +80,22 @@ export default class Wallet implements ISigner {
     }
   }
 
-  public calcMaxRunebaseSend = async (networkName: string) => {
+  public calcMaxHtmlcoinSend = async (networkName: string) => {
     if (!this.qjsWallet || !this.info) {
       throw Error('Cannot calculate max send amount without wallet or this.info.');
     }
-    this.maxRunebaseSend = await this.qjsWallet.sendEstimateMaxValue(this.maxRunebaseSendToAddress(networkName));
-    return this.maxRunebaseSend;
+    this.maxHtmlcoinSend = await this.qjsWallet.sendEstimateMaxValue(this.maxHtmlcoinSendToAddress(networkName));
+    return this.maxHtmlcoinSend;
   }
 
   /**
    * We just need to pass a valid sendTo address belonging to that network for the
-   * runebasejs-wallet library to calculate the maxRunebaseSend amount.  It does not matter what
+   * htmlcoinjs-wallet library to calculate the maxHtmlcoinSend amount.  It does not matter what
    * the specific address is, as that does not affect the value of the
-   * maxRunebaseSend amount
+   * maxHtmlcoinSend amount
    */
-  private maxRunebaseSendToAddress = (networkName: string) => {
+  private maxHtmlcoinSendToAddress = (networkName: string) => {
     return networkName === NETWORK_NAMES.MAINNET ?
-      'QN8HYBmMxVyf7MQaDvBNtneBN8np5dZwoW' : 'qLJsx41F8Uv1KFF3RbrZfdLnyWQzvPdeF9';
+      'HqLg1oj1o2YRE6ZwctvpYP4kfaXvGZV2WT' : 'hqLg1oj1o2YRE6ZwctvpYP4kfaXvGZV2WT';
   }
 }
