@@ -35,13 +35,13 @@ function getHeight(element: HTMLElement) {
 export function showModal(width: number, height: number, style: any = {}, src?: string): Promise<HTMLIFrameElement> {
   const iframe = document.createElement('iframe');
 
-  addClass(iframe, 'runebasechrome-extension-modal');
+  addClass(iframe, 'htmlcoinchrome-extension-modal');
 
   const backdrop = document.createElement('div');
-  addClass(backdrop, 'runebasechrome-extension-modal-backdrop');
+  addClass(backdrop, 'htmlcoinchrome-extension-modal-backdrop');
 
   const html = document.documentElement;
-  addClass(html, 'runebasechrome-extension-modal-wrap');
+  addClass(html, 'htmlcoinchrome-extension-modal-wrap');
 
   const body = document.querySelector('body')!;
 
@@ -74,14 +74,14 @@ export function showModal(width: number, height: number, style: any = {}, src?: 
 }
 
 export function closeModal() {
-  const iframe = document.querySelector('iframe.runebasechrome-extension-modal');
+  const iframe = document.querySelector('iframe.htmlcoinchrome-extension-modal');
 
   if (iframe) {
     iframe.remove();
-    const backdrop = document.querySelector('.runebasechrome-extension-modal-backdrop');
+    const backdrop = document.querySelector('.htmlcoinchrome-extension-modal-backdrop');
 
     if (backdrop) { backdrop.remove(); }
 
-    removeClass(document.documentElement, 'runebasechrome-extension-modal-wrap');
+    removeClass(document.documentElement, 'htmlcoinchrome-extension-modal-wrap');
   }
 }
