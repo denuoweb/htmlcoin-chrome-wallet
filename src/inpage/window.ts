@@ -1,6 +1,6 @@
 import { ISignExternalTxRequest } from '../types';
 
-function showWindow(width: number, height: number, url: string = '', name: string = 'runebasechrome-window'): Window {
+function showWindow(width: number, height: number, url: string = '', name: string = 'htmlcoinchrome-window'): Window {
   const top = (screen.availHeight / 2) - (height / 2);
   const left = (screen.availWidth / 2) - (width / 2);
   const options = `
