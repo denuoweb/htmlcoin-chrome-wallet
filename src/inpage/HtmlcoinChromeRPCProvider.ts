@@ -3,7 +3,7 @@ import { TARGET_NAME, API_TYPE } from '../constants';
 import { generateRequestId } from '../utils';
 import { postWindowMessage } from '../utils/messenger';
 
-export class RunebaseChromeRPCProvider {
+export class HtmlcoinChromeRPCProvider {
   private requests: { [id: string]: IRPCCallPendingRequest } = {};
 
   public rawCall = (method: string, args: any[]) => {
