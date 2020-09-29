@@ -31,7 +31,7 @@ export default class SendStore {
   @observable public receiverAddress?: string = INIT_VALUES.receiverAddress;
   @observable public token?: QRCToken = INIT_VALUES.token;
   @observable public amount: number | string = INIT_VALUES.amount;
-  @observable public maxRunebaseSend?: number = INIT_VALUES.maxRunebaseSend;
+  @observable public maxHtmlcoinSend?: number = INIT_VALUES.maxHtmlcoinSend;
   public transactionSpeeds: string[] = INIT_VALUES.transactionSpeeds;
   @observable public transactionSpeed?: string = INIT_VALUES.transactionSpeed;
   @observable public gasLimit: number = INIT_VALUES.gasLimitRecommendedAmount;
@@ -62,8 +62,8 @@ export default class SendStore {
   }
   @computed public get maxAmount(): number | undefined {
     if (this.token) {
-      if (this.token.symbol === 'RUNES') {
-        return this.maxRunebaseSend;
+      if (this.token.symbol === 'HTML') {
+        return this.maxHtmlcoinSend;
       }
       return this.token!.balance;
     }
@@ -79,15 +79,15 @@ export default class SendStore {
   @action
   public init = () => {
     chrome.runtime.onMessage.addListener(this.handleMessage);
-    chrome.runtime.sendMessage({ type: MESSAGE_TYPE.GET_QRC_TOKEN_LIST }, (response: any) => {
+    chrome.runtime.sendMessage({ type: MESSAGE_TYPE.GET_HRC_TOKEN_LIST }, (response: any) => {
       this.tokens = response;
-      this.tokens.unshift(new QRCToken('Runebase Token', 'RUNES', 8, ''));
+      this.tokens.unshift(new QRCToken('Htmlcoin Token', 'HTML', 8, ''));
       this.tokens[0].balance = this.app.sessionStore.info ? this.app.sessionStore.info.balance : undefined;
       this.token = this.tokens[0];
     });
     this.senderAddress = this.app.sessionStore.info ? this.app.sessionStore.info.addrStr : undefined;
     chrome.runtime.sendMessage({
-      type: MESSAGE_TYPE.GET_MAX_RUNEBASE_SEND,
+      type: MESSAGE_TYPE.GET_MAX_HTMLCOIN_SEND,
     });
   }
 
@@ -111,7 +111,7 @@ export default class SendStore {
     }
 
     this.sendState = SEND_STATE.SENDING;
-    if (this.token.symbol === 'RUNES') {
+    if (this.token.symbol === 'HTML') {
       chrome.runtime.sendMessage({
         type: MESSAGE_TYPE.SEND_TOKENS,
         receiverAddress: this.receiverAddress,
@@ -120,7 +120,7 @@ export default class SendStore {
       });
     } else {
       chrome.runtime.sendMessage({
-        type: MESSAGE_TYPE.SEND_QRC_TOKENS,
+        type: MESSAGE_TYPE.SEND_HRC_TOKENS,
         receiverAddress: this.receiverAddress,
         amount: Number(this.amount),
         token: this.token,
@@ -142,9 +142,9 @@ export default class SendStore {
         this.sendState = SEND_STATE.INITIAL;
         this.errorMessage = request.error.message;
         break;
-      case MESSAGE_TYPE.GET_MAX_RUNEBASE_SEND_RETURN:
-        const runebaseToken = this.tokens[0];
-        this.maxRunebaseSend = request.maxRunebaseAmount / (10 ** runebaseToken.decimals);
+      case MESSAGE_TYPE.GET_MAX_HTMLCOIN_SEND_RETURN:
+        const htmlcoinToken = this.tokens[0];
+        this.maxHtmlcoinSend = request.maxHtmlcoinAmount / (10 ** htmlcoinToken.decimals);
         break;
       default:
         break;
