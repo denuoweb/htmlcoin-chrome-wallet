@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { Insight } from 'runebasejs-wallet';
+import { Insight } from 'htmlcoinjs-wallet';
 import { isUndefined } from 'lodash';
 
 import { MESSAGE_TYPE, NETWORK_NAMES } from '../../constants';
@@ -9,7 +9,7 @@ const INIT_VALUES = {
   networkIndex: 0,
   loggedInAccountName: undefined,
   info: undefined,
-  runebaseUSD: undefined,
+  htmlcoinUSD: undefined,
 };
 
 export default class SessionStore {
@@ -17,8 +17,8 @@ export default class SessionStore {
   @observable public networks: QryNetwork[] = [];
   @observable public loggedInAccountName?: string = INIT_VALUES.loggedInAccountName;
   @observable public info?: Insight.IGetInfo = INIT_VALUES.info;
-  @computed public get runebaseBalanceUSD() {
-    return isUndefined(this.runebaseUSD) ? 'Loading...' : `$${this.runebaseUSD} USD`;
+  @computed public get htmlcoinBalanceUSD() {
+    return isUndefined(this.htmlcoinUSD) ? 'Loading...' : `$${this.htmlcoinUSD} USD`;
   }
   @computed public get networkName() {
     return this.networks[this.networkIndex].name;
@@ -30,7 +30,7 @@ export default class SessionStore {
     return  this.isMainNet ? '' : `(${this.networkName}, no value)`;
   }
 
-  private runebaseUSD?: number = INIT_VALUES.runebaseUSD;
+  private htmlcoinUSD?: number = INIT_VALUES.htmlcoinUSD;
 
   constructor() {
     chrome.runtime.onMessage.addListener(this.handleMessage);
@@ -48,7 +48,7 @@ export default class SessionStore {
       this.loggedInAccountName = response;
     });
     chrome.runtime.sendMessage({ type: MESSAGE_TYPE.GET_WALLET_INFO }, (response: any) => this.info = response);
-    chrome.runtime.sendMessage({ type: MESSAGE_TYPE.GET_RUNEBASE_USD }, (response: any) => this.runebaseUSD = response);
+    chrome.runtime.sendMessage({ type: MESSAGE_TYPE.GET_HTMLCOIN_USD }, (response: any) => this.htmlcoinUSD = response);
   }
 
   @action
@@ -63,8 +63,8 @@ export default class SessionStore {
       case MESSAGE_TYPE.GET_WALLET_INFO_RETURN:
         this.info = request.info;
         break;
-      case MESSAGE_TYPE.GET_RUNEBASE_USD_RETURN:
-        this.runebaseUSD = request.runebaseUSD;
+      case MESSAGE_TYPE.GET_HTMLCOIN_USD_RETURN:
+        this.htmlcoinUSD = request.htmlcoinUSD;
         break;
       default:
         break;
