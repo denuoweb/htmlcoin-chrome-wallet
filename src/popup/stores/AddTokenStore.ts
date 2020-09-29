@@ -52,7 +52,7 @@ export default class AddTokenStore {
         // If valid contract address, send rpc call to fetch other contract details
         if (this.contractAddress && !this.contractAddressFieldError) {
           chrome.runtime.sendMessage(
-            { type: MESSAGE_TYPE.GET_QRC_TOKEN_DETAILS,
+            { type: MESSAGE_TYPE.GET_HRC_TOKEN_DETAILS,
               contractAddress: this.contractAddress});
         }
       },
@@ -94,7 +94,7 @@ export default class AddTokenStore {
   @action
   private handleMessage = (request: any) => {
     switch (request.type) {
-      case MESSAGE_TYPE.QRC_TOKEN_DETAILS_RETURN:
+      case MESSAGE_TYPE.HRC_TOKEN_DETAILS_RETURN:
         if (request.isValid) {
           const { name, symbol, decimals } = request.token;
           this.name = name;
