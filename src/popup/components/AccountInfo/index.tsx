@@ -28,7 +28,7 @@ class AccountInfo extends Component<WithStyles & IProps, {}> {
 
   public render() {
     const { classes, hasRightArrow } = this.props;
-    const { loggedInAccountName, info, runebaseBalanceUSD, networkBalAnnotation } = this.props.store!.sessionStore;
+    const { loggedInAccountName, info, htmlcoinBalanceUSD, networkBalAnnotation } = this.props.store!.sessionStore;
 
     if (!loggedInAccountName || !info) {
       return null;
