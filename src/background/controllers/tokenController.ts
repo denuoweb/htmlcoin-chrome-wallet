@@ -179,20 +179,20 @@ export default class TokenController extends IController {
       if (name && symbol && decimals) {
         const token = new QRCToken(name, symbol, decimals, contractAddress);
         msg = {
-          type: MESSAGE_TYPE.QRC_TOKEN_DETAILS_RETURN,
+          type: MESSAGE_TYPE.HRC_TOKEN_DETAILS_RETURN,
           isValid: true,
           token,
         };
       } else {
         msg = {
-          type: MESSAGE_TYPE.QRC_TOKEN_DETAILS_RETURN,
+          type: MESSAGE_TYPE.HRC_TOKEN_DETAILS_RETURN,
           isValid: false,
         };
       }
     } catch (err) {
       console.error(err);
       msg = {
-        type: MESSAGE_TYPE.QRC_TOKEN_DETAILS_RETURN,
+        type: MESSAGE_TYPE.HRC_TOKEN_DETAILS_RETURN,
         isValid: false,
       };
     }
@@ -243,7 +243,7 @@ export default class TokenController extends IController {
       [this.chromeStorageAccountTokenListKey()]: this.tokens,
     }, () => {
       chrome.runtime.sendMessage({
-        type: MESSAGE_TYPE.QRC_TOKENS_RETURN,
+        type: MESSAGE_TYPE.HRC_TOKENS_RETURN,
         tokens: this.tokens,
       });
     });
@@ -256,16 +256,16 @@ export default class TokenController extends IController {
   private handleMessage = (request: any, _: chrome.runtime.MessageSender, sendResponse: (response: any) => void) => {
     try {
       switch (request.type) {
-        case MESSAGE_TYPE.GET_QRC_TOKEN_LIST:
+        case MESSAGE_TYPE.GET_HRC_TOKEN_LIST:
           sendResponse(this.tokens);
           break;
-        case MESSAGE_TYPE.SEND_QRC_TOKENS:
+        case MESSAGE_TYPE.SEND_HRC_TOKENS:
           this.sendQRCToken(request.receiverAddress, request.amount, request.token, request.gasLimit, request.gasPrice);
           break;
         case MESSAGE_TYPE.ADD_TOKEN:
           this.addToken(request.contractAddress, request.name, request.symbol, request.decimals);
           break;
-        case MESSAGE_TYPE.GET_QRC_TOKEN_DETAILS:
+        case MESSAGE_TYPE.GET_HRC_TOKEN_DETAILS:
           this.getQRCTokenDetails(request.contractAddress);
           break;
         case MESSAGE_TYPE.REMOVE_TOKEN:
