@@ -484,7 +484,7 @@ export default class AccountController extends IController {
           break;
         case MESSAGE_TYPE.GET_HTMLCOIN_USD:
           sendResponse(this.loggedInAccount && this.loggedInAccount.wallet
-            ? this.loggedInAccount.wallet.HtmlcoinUSD : undefined);
+            ? this.loggedInAccount.wallet.htmlcoinUSD : undefined);
           break;
         case MESSAGE_TYPE.VALIDATE_WALLET_NAME:
           sendResponse(this.isWalletNameTaken(request.name));
