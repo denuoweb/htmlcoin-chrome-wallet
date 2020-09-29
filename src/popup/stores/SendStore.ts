@@ -14,7 +14,7 @@ const INIT_VALUES = {
   token: undefined,
   amount: '',
   maxAmount: undefined,
-  maxRunebaseSend: undefined,
+  maxHtmlcoinSend: undefined,
   sendState: SEND_STATE.INITIAL,
   errorMessage: undefined,
   transactionSpeed: TRANSACTION_SPEED.NORMAL,
