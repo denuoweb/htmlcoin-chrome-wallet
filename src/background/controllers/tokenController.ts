@@ -129,7 +129,7 @@ export default class TokenController extends IController {
       this.tokens![index].balance = balance;
     }
 
-    chrome.runtime.sendMessage({ type: MESSAGE_TYPE.QRC_TOKENS_RETURN, tokens: this.tokens });
+    chrome.runtime.sendMessage({ type: MESSAGE_TYPE.HRC_TOKENS_RETURN, tokens: this.tokens });
   }
 
   /**
