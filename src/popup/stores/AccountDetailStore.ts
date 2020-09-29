@@ -69,7 +69,7 @@ export default class AccountDetailStore {
   }
 
   private onTokenTabSelected = () => {
-    chrome.runtime.sendMessage({ type: MESSAGE_TYPE.GET_QRC_TOKEN_LIST }, (response: any) => {
+    chrome.runtime.sendMessage({ type: MESSAGE_TYPE.GET_HRC_TOKEN_LIST }, (response: any) => {
       this.tokens = response;
     });
     chrome.runtime.sendMessage({ type: MESSAGE_TYPE.STOP_TX_POLLING });
@@ -82,7 +82,7 @@ export default class AccountDetailStore {
         this.transactions = request.transactions;
         this.hasMore = request.hasMore;
         break;
-      case MESSAGE_TYPE.QRC_TOKENS_RETURN:
+      case MESSAGE_TYPE.HRC_TOKENS_RETURN:
         this.tokens = request.tokens;
         break;
       default:
