@@ -17,7 +17,7 @@ interface IProps {
 class Receive extends Component<WithStyles & IProps, {}> {
   public render() {
     const { classes } = this.props;
-    const { loggedInAccountName, info, runebaseBalanceUSD, networkBalAnnotation } = this.props.store.sessionStore;
+    const { loggedInAccountName, info, htmlcoinBalanceUSD, networkBalAnnotation } = this.props.store.sessionStore;
 
     if (!loggedInAccountName || !info) {
       return null;
@@ -31,9 +31,9 @@ class Receive extends Component<WithStyles & IProps, {}> {
           <Typography className={classes.accountAddress}>{info.addrStr}</Typography>
           <div className={classes.amountContainer}>
             <Typography className={classes.tokenAmount}>{info.balance}</Typography>
-            <Typography className={classes.token}>RUNES</Typography>
+            <Typography className={classes.token}>HTML</Typography>
           </div>
-          <Typography className={classes.currencyValue}>{`${runebaseBalanceUSD} ${networkBalAnnotation}`}</Typography>
+          <Typography className={classes.currencyValue}>{`${htmlcoinBalanceUSD} ${networkBalAnnotation}`}</Typography>
           <div className={classes.qrCodeContainer}>
             <QRCode value={info!.addrStr} />
           </div>
